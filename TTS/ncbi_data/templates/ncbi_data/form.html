@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NCBI Data Fetcher</title>
+</head>
+<body>
+    <h1>NCBI Data Fetcher</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="db">Database:</label>
+        <input type="text" name="db" required><br>
+        <label for="query">Query:</label>
+        <input type="text" name="query" required><br>
+        <input type="submit" value="Fetch Data">
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('', {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            });
+        });
+    </script>
+</body>
+</html>
